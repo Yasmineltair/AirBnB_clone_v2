@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
@@ -113,28 +114,38 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def class_name_missing(self):
+        """** class name missing **"""
+        print("** class name missing **")
+
+    def class_not_found(self):
+        """** class doesn't exist **"""
+        print("** class doesn't exist **")
+
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        arg_all = args.split(' ')
-        arg_dict = {}
-        for arg in arg_all:
-            items = arg.split('=')
-            key = items[0]
-            value = '='.join(items[1:])
-            value = eval(value)
-            if isinstance(value, str):
-                value = value.replace('_', ' ').replace('"', '\"')
-            arg_dict[key] = value
-
-        new_instance = HBNBCommand.classes[arg_all[0]](**arg_dict)
-        print(new_instance.id)
-        new_instance.save()
+        commands = args.split(' ')
+        if len(commands) == 0:
+            self.class_name_missing()
+        elif commands[0] not in self.classes:
+            self.class_not_found()
+        elif len(commands) > 1:
+            arg_all = commands[1:]
+            ins = eval(commands[0])()
+            for arg in arg_all:
+                items = arg.split('=')
+                key = items[0]
+                value = '='.join(items[1:])
+                value = eval(value)
+                if isinstance(value, str):
+                    value = value.replace('_', ' ').replace('"', '\"')
+                self.do_update(f"{commands[0]} {ins.id} {key} \"{value}\"")
+            ins.save()
+            print(ins.id)
+        else:
+            ins = eval(commands[0])()
+            ins.save()
+            print(ins.id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -329,7 +340,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
