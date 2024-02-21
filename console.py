@@ -124,7 +124,6 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         elif len(commands) > 1:
             arg_all = commands[1:]
-            ins = eval(commands[0])()
             for arg in arg_all:
                 items = arg.split('=')
                 items[1] = eval(items[1])
