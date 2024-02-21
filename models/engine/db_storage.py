@@ -20,6 +20,9 @@ class DBStorage:
     __session = None
 
     def __init__(self):
+        """
+        init db storage
+        """
         user = os.getenv('HBNB_MYSQL_USER')
         pswd = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST')
@@ -31,26 +34,43 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """
+        return all instances /or/ cls instances
+        """
         out_dict = {}
-        list_of_classes = [cls] if cls else \
-            ["State", "City", "Amenity", "Place", "User", "Review"]
-        for class_name in list_of_classes:
+        if cls:
+            classes = [cls]
+        else:
+            classes = ["State", "City", "Amenity", "Place", "User", "Review"]
+        for class_name in classes:
             class_instances = self.__session.query(class_name)
             for ins in class_instances:
                 out_dict["{}.{}".format(type(ins).__name__, ins.id)] = ins
         return out_dict
 
     def new(self, obj):
+        """
+        create new obj
+        """
         self.__session.add(obj)
 
     def save(self):
+        """
+        save and commit to db
+        """
         self.__session.commit()
 
     def delete(self, obj=None):
+        """
+        delete obj of db
+        """
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
+        """
+        reload objs from db
+        """
         Base.metadata.create_all(self.__engine)
         mainSession = sessionmaker(bind=self.__engine, expire_on_commit=False)
         session = scoped_session(mainSession)
