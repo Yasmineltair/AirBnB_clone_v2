@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
-import json
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -73,4 +72,5 @@ class DBStorage:
         """
         Base.metadata.create_all(self.__engine)
         mainSession = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        self.__session = mainSession()
+        sess = scoped_session(mainSession)
+        self.__session = sess()
