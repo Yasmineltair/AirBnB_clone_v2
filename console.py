@@ -131,10 +131,10 @@ class HBNBCommand(cmd.Cmd):
             if isinstance(value, str):
                 value = value.replace('_', ' ').replace('"', '\"')
             arg_dict[key] = value
-            
+
         new_instance = HBNBCommand.classes[arg_all[0]](**arg_dict)
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
