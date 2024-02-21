@@ -140,31 +140,6 @@ class HBNBCommand(cmd.Cmd):
             ins.save()
             print(ins.id)
 
-    # def do_create(self, args):
-    #     """ Create an object of any class"""
-    #     commands = args.split(' ')
-    #     if len(commands) == 0:
-    #         print("** class name missing **")
-    #     elif commands[0] not in self.classes:
-    #         print("** class doesn't exist **")
-    #     elif len(commands) > 1:
-    #         arg_all = commands[1:]
-    #         ins = eval(commands[0])()
-    #         for arg in arg_all:
-    #             items = arg.split('=')
-    #             key = items[0]
-    #             value = '='.join(items[1:])
-    #             value = eval(value)
-    #             if isinstance(value, str):
-    #                 value = value.replace('_', ' ').replace('"', '\"')
-    #             self.do_update(f"{commands[0]} {ins.id} {key} \"{value}\"")
-    #         ins.save()
-    #         print(ins.id)
-    #     else:
-    #         ins = eval(commands[0])()
-    #         ins.save()
-    #         print(ins.id)
-
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
