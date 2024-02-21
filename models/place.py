@@ -3,6 +3,7 @@
 from models.base_model import BaseModel
 from sqlalchemy import String, Column, ForeignKey
 
+
 class Place(BaseModel):
     """ A place to stay """
     city_id = ""
