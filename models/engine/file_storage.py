@@ -13,7 +13,7 @@ class FileStorage:
         if cls:
             out = {}
             for obj, val in FileStorage.__objects.items():
-                if f"{cls}." not in obj:
+                if f"{cls}." in obj:
                     out[obj] = val
             return out
         else:
