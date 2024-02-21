@@ -131,7 +131,8 @@ class HBNBCommand(cmd.Cmd):
                 value = eval(value)
                 if isinstance(value, str):
                     value = value.replace('_', ' ').replace('"', '\"')
-                self.do_update(f"{commands[0]} {ins.id} {key} \"{value}\"")
+                if hasattr(ins, key):
+                    setattr(ins, key, value)
             ins.save()
             print(ins.id)
         else:
