@@ -38,9 +38,11 @@ class DBStorage:
         """
         out_dict = {}
         if cls:
+            if type(cls) is str:
+                cls = eval(cls)
             classes = [cls]
         else:
-            classes = ["State", "City", "Amenity", "Place", "User", "Review"]
+            classes = [State, City, Amenity, Place, User, Review]
         for class_name in classes:
             class_instances = self.__session.query(class_name)
             for ins in class_instances:
@@ -72,5 +74,5 @@ class DBStorage:
         """
         Base.metadata.create_all(self.__engine)
         mainSession = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        sess = scoped_session(mainSession)
-        self.__session = sess()
+        session = scoped_session(mainSession)
+        self.__session = session()
