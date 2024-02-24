@@ -15,30 +15,19 @@ class BaseModel:
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
-    def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
-        if not kwargs:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
-            if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(
-                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            else:
-                kwargs['updated_at'] = datetime.now()
-            self.updated_at = kwargs['updated_at']
-            if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(
-                    kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-            else:
-                kwargs['created_at'] = datetime.now()
-            self.created_at = kwargs['created_at']
-            if 'id' not in kwargs:
-                self.id = str(uuid.uuid4())
-            if '__class__' in kwargs:
-                del kwargs['__class__']
-            self.__dict__.update(kwargs)
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialization of BaseModel Class"""
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.datetime.now()
+        self.updated_at = datetime.datetime.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key in ["created_at", "updated_at"]:
+                    date = datetime.datetime.strptime(
+                        value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key, date)
+                elif key != "__class__":
+                    setattr(self, key, value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
