@@ -1,11 +1,19 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.city import City
 from models.review import Review
+from models.amenity import Amenity
 import os
+import models
+
+place_amenity = Table("place_amenity", Base.metadata,
+                      Column("place_id", String(60), ForeignKey("places.id"),
+                             primary_key=True, nullable=False),
+                      Column("amenity_id", String(60), ForeignKey("amenities.id"),
+                             primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -24,6 +32,7 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
         amenity_ids = []
         reviews = relationship("Review", cascade="all, delete", backref="place")
+        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False, back_populates="place_amenities")
     else:
         city_id = ""
         user_id = ""
@@ -38,11 +47,26 @@ class Place(BaseModel, Base):
         amenity_ids = []
         @property
         def reviews(self):
-            """Getter document"""
-            from models import storage
-            reviewsList = []
-            reviewsAll = storage.all(Review)
-            for review in reviewsAll.values():
+            """ getter for reviews """
+            reviews_out = []
+            all_reviews = models.storage.all(Review)
+            for review in all_reviews.values():
                 if review.place_id in self.id:
-                    reviewsList.append(review)
-            return reviewsList
+                    reviews_out.append(review)
+            return reviews_out
+        @property
+        def amenities(self):
+            """ getter for amenities """
+            amenities_out = []
+            all_amenities = models.storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.id in self.amenity_ids:
+                    amenities_out.append(amenity)
+            return amenities_out
+
+        @amenities.setter
+        def amenities(self, amenity):
+            """ setter for amenities """
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
+
