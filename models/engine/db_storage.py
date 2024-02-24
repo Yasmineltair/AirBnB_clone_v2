@@ -3,15 +3,13 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import BaseModel, Base
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
+from models.base_model import Base
 from models.user import User
-
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class DBStorage:
     """This class manages storage of hbnb models in db storage format"""
@@ -26,7 +24,7 @@ class DBStorage:
         pswd = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST')
         db = os.getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".
+        self.__engine = create_engine("mysql+pymysql://{}:{}@{}/{}".
                                       format(user, pswd, host, db),
                                       pool_pre_ping=True)
         if os.getenv('HBNB_ENV') == "test":
@@ -73,6 +71,9 @@ class DBStorage:
         reload objs from db
         """
         Base.metadata.create_all(self.__engine)
-        mainSession = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        session = scoped_session(mainSession)
-        self.__session = session()
+        Session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
+        self.__session = Session()
+
+    def close(self):
+        """doc meth"""
+        self.__session.close()

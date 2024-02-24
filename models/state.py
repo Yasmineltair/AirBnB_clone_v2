@@ -3,10 +3,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import storage
-import os
+import models
 
-storage_type = os.getenv("HBNB_TYPE_STORAGE")
 
 class State(BaseModel, Base):
     """
@@ -16,16 +14,13 @@ class State(BaseModel, Base):
     cascade relation to citites.
     """
     __tablename__ = "states"
-    if storage_type == "db":
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", cascade="all, delete, delete-orphan",
-                            backref="state")
-    else:
-        name = ""
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", cascade="all, delete, delete-orphan",
+                           backref="state")
 
     @property
     def cities(self):
-        all_objects = storage.all()
+        all_objects = models.storage.all()
         out_list = []
         for obj in all_objects:
             if obj.split('.')[0] == "City":
