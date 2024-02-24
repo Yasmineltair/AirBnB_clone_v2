@@ -5,6 +5,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.place import Place
 
+
 class User(BaseModel, Base):
     """
     User class -> table `users`
