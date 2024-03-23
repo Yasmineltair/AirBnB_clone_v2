@@ -18,10 +18,10 @@ def display():
     return "/hbnb"
 
 
-@web_app.route("/c/<text>", strict_slashes=False)
+@web_app.route('/c/<text>', strict_slashes=False)
 def c_fun():
     """ c is fun"""
-    return "C {}".format(text.replace("_", " "))
+    return 'C {}'.format(text.replace("_", " "))
 
 
 if __name__ == "__main__":
