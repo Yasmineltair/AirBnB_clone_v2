@@ -24,8 +24,9 @@ def c_fun(text):
     return "C {}".format(text.replace("_", " "))
 
 
+@web_app.route("/python", defaults={'text': 'is cool'}, strict_slashes=False)
 @web_app.route("/python/<text>", strict_slashes=False)
-def py(text="is cool"):
+def py(text):
     """ display “Python ”, followed by the value of the text"""
     return "Python {}".format(text.replace("_", " "))
 
