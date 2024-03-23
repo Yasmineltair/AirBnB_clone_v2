@@ -19,7 +19,7 @@ def display():
 
 
 @web_app.route('/c/<text>', strict_slashes=False)
-def c_fun():
+def c_fun(text):
     """ c is fun"""
     return 'C {}'.format(text.replace("_", " "))
 
