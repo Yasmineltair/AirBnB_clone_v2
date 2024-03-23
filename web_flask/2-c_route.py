@@ -15,7 +15,7 @@ def homepage():
 @web_app.route("/hbnb", strict_slashes=False)
 def display():
     """ display"""
-    return "/hbnb"
+    return "HBNB"
 
 
 @web_app.route('/c/<text>', strict_slashes=False)
