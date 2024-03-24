@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
 import models
-from sqlalchemy.orm import mapped_column
+
 
 Base = declarative_base()
 
