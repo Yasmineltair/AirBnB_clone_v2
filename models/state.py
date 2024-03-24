@@ -17,12 +17,14 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
     cities = relationship("City", cascade="all, delete, delete-orphan",
                           backref="state")
-    @property
-    def cities(self):
-        all_objects = models.storage.all()
-        out_list = []
-        for obj in all_objects:
-            if obj.split('.')[0] == "City":
-                if all_objects[obj].state_id == self.id:
-                    out_list.append(all_objects[obj])
-        return out_list
+
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def cities(self):
+            all_objects = models.storage.all()
+            out_list = []
+            for obj in all_objects:
+                if obj.split('.')[0] == "City":
+                    if all_objects[obj].state_id == self.id:
+                        out_list.append(all_objects[obj])
+            return out_list
