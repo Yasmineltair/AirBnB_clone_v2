@@ -14,9 +14,12 @@ class State(BaseModel, Base):
     cascade relation to citites.
     """
     __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="all, delete, delete-orphan",
+    if storage_type == "db":
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", cascade="all, delete, delete-orphan",
                           backref="state")
+    else:
+        name = ""
 
     @property
     def cities(self):
