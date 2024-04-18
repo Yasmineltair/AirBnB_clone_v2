@@ -3,14 +3,14 @@
 from flask import Flask
 
 
-web_app = Flask(__name__)
+app = Flask(__name__)
 
 
-@web_app.route("/", strict_slashes=False)
+@app.route("/airbnb-onepage/", strict_slashes=False)
 def homepage():
     """ homapage"""
     return "Hello HBNB!"
 
 
 if __name__ == "__main__":
-    web_app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
